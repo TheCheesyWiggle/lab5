@@ -1,58 +1,56 @@
 import Data.List
 
 main :: IO ()
-main =
-    print ( filter tester generator )
-    
-special :: String -> Bool
-special s 
-    = not('0' `elem` s)
-    && nodups s
 
-nodups :: Eq a => [a] -> Bool
-nodups s 
+main = 
+    print (x_generator2)
+    --print(avg 8 6)
+    --print(tester1 (16,59,27,4))
+    --print (filter tester1 generator1)
+    --print(tester ( " 123 " ," 21 " ," 123 " ," 12 " ," 123 " ))
+
+    
+generator2:: [(String, String, String, String, String)]
+generator2 = [(n1, n2, n3, n4, n5)
+    -- Generates numbers
+    | s1 <- map show[123..987]
+    , special s1
+    , n1 <- permutations s1
+    , n2 <- take 2 (permutations n1)
+    , n3 <- permutations n1
+    , n4 <- take 2 (permutations n1)
+    , n5 <- permutations n1
+    , noDups [n1, n2, n3, n4, n5]
+    , first(n1)/=first(n2)
+    ]
+--toInt::(String,String,String,String,String) -> (Int,Int,Int,Int,Int)
+--toInt (n1, n2, n3, n4, n5)
+--    = 
+
+first:: String -> Char
+first (head:tail) = head
+
+special:: String -> Bool
+special s = not ('0' `elem` s) && noDups s
+
+noDups :: Eq a => [a] -> Bool
+noDups s 
     = s == nub s
     
-generator :: [( String , String , String , String )]
-generator
-    = [(s1,s2,s3,s4)
-    | s1 <- map show [100 .. 999]
-    , special s1
-    , s2 <- permutations s1
-    , s3 <- permutations s1
-    , s4 <- permutations s1
-    , nodups [s1,s2,s3,s4]
-    ]
-    
-
-
-perfectSquare :: Int -> Bool
-perfectSquare n
-    = root 1
-        where
-        root r
-            | n < r * r = False
-            | n > r * r = root(r+1)
-            | otherwise = True
-
-prime :: Int -> Bool
-prime 
-    = not . factorisable 2
-
-factorisable :: Int -> Int -> Bool
-factorisable f n
-    | f*f <= n=n `mod` f==0 || factorisable (f+1)n
-    | otherwise = False
-    
-tester :: (String,String,String,String) -> Bool
-tester (s1,s2,s3,s4)
-    = perfectSquare i1
-    && prime(i1+i2+i3+i4)
-    && length (filter perfectSquare is) > 0
-    
+x_generator2 :: Int
+x_generator2 =
+    length [ t | t <- ts , t `elem` g ]
     where
-        i1 = read s1
-        i2 = read s2
-        i3 = read s3
-        i4 = read s4
-        is = map read (permutations s1 \\ [s1,s2,s3,s4])
+        g = generator2
+        ts =
+            [ ( " 123 " ," 21 " ," 123 " ," 12 " ," 123 " )
+            , ( " 162 " ," 26 " ," 261 " ," 12 " ," 621 " )
+            , ( " 219 " ," 19 " ," 912 " ," 21 " ," 291 " )
+            , ( " 329 " ," 92 " ," 932 " ," 32 " ," 239 " )
+            , ( " 439 " ," 94 " ," 394 " ," 43 " ," 394 " )
+            , ( " 549 " ," 95 " ," 945 " ," 95 " ," 945 " )
+            , ( " 568 " ," 68 " ," 586 " ," 56 " ," 586 " )
+            , ( " 769 " ," 67 " ," 679 " ," 97 " ," 796 " )
+            , ( " 879 " ," 79 " ," 897 " ," 98 " ," 789 " )
+            , ( " 987 " ," 79 " ," 789 " ," 79 " ," 789 " )
+            ]
